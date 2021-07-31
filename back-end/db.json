@@ -1,0 +1,17 @@
+{
+
+    "users": [
+        {
+            "id": 1,
+            "name": "Vinicius Carvalho",
+            "email": "viniguter@gmail.com"
+        },
+
+        {
+            "id": 2,
+            "name": "Marcos Oliver",
+            "email": "marcooliver@hotmail.com"
+        }
+    ]
+
+}
