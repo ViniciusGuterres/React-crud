@@ -1,10 +1,14 @@
 import React from 'react';
 import './Logo.css';
+import Img from '../../assets/images/logo.png';
 
 const Logo = props => {
     return(
         <aside className='logo'>
-            Logo
+            <a href="/" className="logo">
+                <img src={Img}
+                alt='logo'/>
+            </a>
         </aside>
     );
 };
