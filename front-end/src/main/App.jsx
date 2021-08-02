@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 
 // bootstrap
@@ -11,14 +12,16 @@ import Nav from '../components/template/Nav';
 import Footer from '../components/template/Footer';
 
 // generic components
-import Home from '../components/home/Home';
+import Routes from './Routes';
 
 const App = props =>
+    <BrowserRouter>
     <div className="app">
         <Logo />
         <Nav />
-        <Home/>
+        <Routes/>
         <Footer />
     </div>
+    </BrowserRouter>
 
 export default App;

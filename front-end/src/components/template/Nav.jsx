@@ -1,19 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Nav.css';
 
 const Nav = props =>
     <aside className="menu-area">
         <nav className="menu">
             {/* Refatorar, criar um component para cada link do menu */}
-            <a href="#/">
+            <Link to="/">
                 <i className='fa fa-home'></i>
                 Início
-            </a>
+            </Link>
 
-            <a href="#/users">
+            <Link to="/users">
                 <i className='fa fa-users'></i>
                 Users
-            </a>
+            </Link>
         </nav>
     </aside>
 
