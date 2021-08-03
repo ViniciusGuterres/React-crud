@@ -21,8 +21,17 @@ export default class UserCrud extends Component {
 
         this.clear = this.clear.bind(this);
         this.updatedField = this.updatedField.bind(this);
+        this.save = this.save.bind(this);
 
         this.state = { ...initialState };
+    };
+
+    componentWillMount() {
+        // get all the users from backend and set in the list state
+        axios(baseUrl)
+            .then(resp => {
+                this.setState({ list: resp.data })
+            });
     };
 
     // just clear the fields with setted values
@@ -100,7 +109,7 @@ export default class UserCrud extends Component {
                     <div className="col-12 d-flex justify-content-end">
 
                         <button className="btn btn-primary"
-                            onClick={ e => this.save(e) }
+                            onClick={ this.save }
                         >
                             Salvar
                         </button>
@@ -118,11 +127,74 @@ export default class UserCrud extends Component {
         )
      };
 
+     load(user) {
+        this.setState({ user });
+     };
+
+     remove(user) {
+         axios.delete(`${baseUrl}/${user.id}`)
+            .then(resp => {
+                const list = this.getUpdatedList(null);
+                this.setState({ list });
+            });
+     };
+
+     renderTable() {
+         return(
+             <table className="table mt-4">
+                 <thead>
+                     <tr>
+
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+
+                     </tr>
+                 </thead>
+
+                <tbody>
+                    { this.renderRows() }
+                </tbody>
+
+             </table>
+         );
+     };
+
+     renderRows() {
+         return this.state.list.map( user => {
+            return(
+                <tr key={user.id}>
+                    <td>{ user.name }</td>
+                    <td>{ user.email }</td>
+                    <td>
+
+                        <button 
+                            className='btn btn-warning'
+                            onClick={ () => this.load(user) }
+                            >
+                            <i className='fa fa-pencil'></i>
+                        </button>
+
+                        <button 
+                            className='btn btn-danger ml-3'
+                            onClick={ () => this.remove(user) }
+                        >
+                            <i className='fa fa-trash'></i>
+                        </button>
+
+                    </td>
+                </tr>
+            )
+         });
+     }
+
     render() {
+        console.log(this.state.list);
         return (
             <Main { ...headerProps }>
                 Cadastro de Usuário
                 { this.renderForm() }
+                { this.renderTable() }
             </Main>
         );
     };
