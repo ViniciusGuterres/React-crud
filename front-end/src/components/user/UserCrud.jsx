@@ -44,18 +44,39 @@ export default class UserCrud extends Component {
         const user = this.state.user;
         const method = user.id ? 'put' : 'post';
         const url = user.id ? `${baseUrl}/${user.id}` : baseUrl;
+        
+        // just apply a simple form validation
+        const userIsValid = this.validateForm(user);
 
-        axios[method] (url, user)
-            .then(resp => {
-                const list = this.getUpdatedList(resp.data);
+        if (userIsValid) {
+            axios[method] (url, user)
+                .then(resp => {
+                    const list = this.getUpdatedList(resp.data);
+    
+                    this.setState({ 
+                        // cleaning the user state and field after post/put it
+                        user: initialState.user,
+                        list
+                     });
+                });
+        } else {
+            alert('preencha os campos corretamente');
+            return;
+        };
 
-                this.setState({ 
-                    // cleaning the user state and field after post/put it
-                    user: initialState.user,
-                    list
-                 });
-            });
-    }
+    };
+
+    validateForm(user) {
+        const name = user.name;
+        const email = user.email;
+
+        console.log(name.length);
+        if (name !== '' &&  name.length >= 5 && email !== '' && email.length >= 10 && email.indexOf('@') !== -1) {
+            return true;
+        } else {
+            return false;
+        };
+    };
     
     // will update the list with the new user at the beginning of the array
     getUpdatedList(user) {
@@ -66,10 +87,10 @@ export default class UserCrud extends Component {
 
     // get the fields values and set in the state
      updatedField(event) {
-         const user = { ...this.state.user };
-         user[event.target.name] = event.target.value;
-         this.setState({ user });
-
+        const user = { ...this.state.user };
+        user[event.target.name] = event.target.value;
+         
+        this.setState({ user });
      };
 
      renderForm() {
@@ -189,7 +210,6 @@ export default class UserCrud extends Component {
      }
 
     render() {
-        console.log(this.state.list);
         return (
             <Main { ...headerProps }>
                 Cadastro de Usuário
