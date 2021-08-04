@@ -26,11 +26,11 @@ export default class UserCrud extends Component {
         this.state = { ...initialState };
     };
 
+    // get all the users from backend and set in the list state
     componentWillMount() {
-        // get all the users from backend and set in the list state
         axios(baseUrl)
             .then(resp => {
-                this.setState({ list: resp.data })
+                this.setState({ list: resp.data });
             });
     };
 
@@ -70,7 +70,6 @@ export default class UserCrud extends Component {
         const name = user.name;
         const email = user.email;
 
-        console.log(name.length);
         if (name !== '' &&  name.length >= 5 && email !== '' && email.length >= 10 && email.indexOf('@') !== -1) {
             return true;
         } else {
@@ -80,9 +79,16 @@ export default class UserCrud extends Component {
     
     // will update the list with the new user at the beginning of the array
     getUpdatedList(user) {
-        const list = this.state.list.filter(u => u.id !== user.id);
-        list.unshift(user);
-        return list;
+        const list = this.state.list
+        
+        if (user) {
+            list.filter(u => u.id !== user.id);
+            list.unshift(user);
+            return list;
+        };
+
+        // case remove some user, the list will be updated with backend data
+        this.componentWillMount();
     };
 
     // get the fields values and set in the state
@@ -155,8 +161,8 @@ export default class UserCrud extends Component {
      remove(user) {
          axios.delete(`${baseUrl}/${user.id}`)
             .then(resp => {
-                const list = this.getUpdatedList(null);
-                this.setState({ list });
+                // calling the method to updated the list without the current removed user
+                this.getUpdatedList(null);
             });
      };
 
